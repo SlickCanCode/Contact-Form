@@ -6,7 +6,10 @@ app = Flask(__name__)
 
 CORS(app, supports_credentials=True, resources={
     r"/*": {
-        "origins": "*"
+        "origins": [
+            "http://localhost:5173",
+            "https://ahavat-olam-farm-website.vercel.app"
+        ]
     }
 })
 

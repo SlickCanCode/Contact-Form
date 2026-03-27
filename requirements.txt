@@ -1,4 +1,4 @@
 Flask
 gunicorn
-flask_cors
-dotenv
+flask-cors
+python-dotenv
