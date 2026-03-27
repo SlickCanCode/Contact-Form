@@ -1,25 +1,31 @@
 from flask import Flask, request, jsonify
-from contact import send_email as contact_me
 from flask_cors import CORS
+from contact import send_email as contact_me
 
 app = Flask(__name__)
-CORS(app) 
+
+CORS(app, supports_credentials=True, resources={
+    r"/*": {
+        "origins": "*"
+    }
+})
 
 @app.route('/contact', methods=['POST'])
 def contact():
-    data = request.get_json()
-    
-    name = data.get('name')
-    company = data.get('company')
-    email = data.get('email')
-    message = data.get('message')
+    try:
+        data = request.get_json()
 
-    response = contact_me(name, company, email, message)
+        name = data.get('name')
+        company = data.get('company')
+        email = data.get('email')
+        message = data.get('message')
 
-    if "error" in response:
-        return jsonify({"error": "An Error Occured, Pls contact us directly via email or whatsapp"}), 500
-    else:
-        return jsonify({"success": "message sent"}),200
+        response = contact_me(name, company, email, message)
 
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+        if "error" in response:
+            return jsonify({"error": "email failed"}), 500
+        return jsonify({"success": True}), 200
+
+    except Exception as e:
+        print("Error:", e)
+        return jsonify({"error": str(e)}), 500
