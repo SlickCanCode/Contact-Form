@@ -24,10 +24,9 @@ def contact():
         message = data.get('message')
 
         response = contact_me(name, company, email, message)
-
         if "error" in response:
-            return jsonify({"error": "email failed"}), 500
-        return jsonify({"success": True}), 200
+            return jsonify({"error": response["error"]}), 500
+        return jsonify({"success": "Message sent"}), 200
 
     except Exception as e:
         print("Error:", e)
